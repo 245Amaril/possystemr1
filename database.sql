@@ -1,3 +1,17 @@
+-- Dumping database structure for kasir
+CREATE DATABASE IF NOT EXISTS `kasir` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */;
+USE `kasir`;
+
+-- Dumping structure for table kasir.products
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `stock` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- Dumping data for table kasir.products: ~6 rows (approximately)
 INSERT INTO `products` (`id`, `name`, `category`, `price`, `stock`) VALUES
 	(1, 'Nasi Goreng', 'makanan', 15000.00, 50),
@@ -7,19 +21,24 @@ INSERT INTO `products` (`id`, `name`, `category`, `price`, `stock`) VALUES
 	(5, 'Keripik', 'snack', 10000.00, 23),
 	(6, 'Coklat', 'snack', 7000.00, 40);
 
--- Dumping data for table kasir.transactions: ~4 rows (approximately)
-INSERT INTO `transactions` (`id`, `transaction_date`, `total_amount`) VALUES
-	(1, '2025-06-23 22:08:08', 7700.00),
-	(2, '2025-06-23 22:14:51', 11000.00),
-	(3, '2025-06-23 22:18:37', 5500.00),
-	(4, '2025-06-23 22:25:04', 16500.00),
-	(5, '2025-06-23 22:52:40', 5500.00);
+-- Dumping structure for table kasir.transactions
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transaction_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `total_amount` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table kasir.transaction_details: ~6 rows (approximately)
-INSERT INTO `transaction_details` (`id`, `transaction_id`, `product_id`, `quantity`, `price_per_item`) VALUES
-	(1, 1, 6, 1, 7000.00),
-	(2, 2, 5, 1, 10000.00),
-	(3, 3, 3, 1, 5000.00),
-	(4, 4, 5, 1, 10000.00),
-	(5, 4, 3, 1, 5000.00),
-	(6, 5, 3, 1, 5000.00);
+-- Dumping structure for table kasir.transaction_details
+CREATE TABLE IF NOT EXISTS `transaction_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transaction_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price_per_item` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `transaction_id` (`transaction_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `transaction_details_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `transaction_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
