@@ -6,20 +6,14 @@ USE `kasir`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `category` varchar(100) NOT NULL,
+  `category` varchar(100) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Dumping data for table kasir.products: ~6 rows (approximately)
-INSERT INTO `products` (`id`, `name`, `category`, `price`, `stock`) VALUES
-	(1, 'Nasi Goreng', 'makanan', 15000.00, 50),
-	(2, 'Mie Ayam', 'makanan', 12000.00, 30),
-	(3, 'Es Teh', 'minuman', 5000.00, 94),
-	(4, 'Kopi', 'minuman', 8000.00, 80),
-	(5, 'Keripik', 'snack', 10000.00, 23),
-	(6, 'Coklat', 'snack', 7000.00, 40);
+-- Dumping data for table kasir.products: ~0 rows (approximately)
 
 -- Dumping structure for table kasir.transactions
 CREATE TABLE IF NOT EXISTS `transactions` (
@@ -27,7 +21,9 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `transaction_date` datetime NOT NULL DEFAULT current_timestamp(),
   `total_amount` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table kasir.transactions: ~0 rows (approximately)
 
 -- Dumping structure for table kasir.transaction_details
 CREATE TABLE IF NOT EXISTS `transaction_details` (
@@ -41,4 +37,21 @@ CREATE TABLE IF NOT EXISTS `transaction_details` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `transaction_details_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`id`) ON DELETE CASCADE,
   CONSTRAINT `transaction_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table kasir.transaction_details: ~0 rows (approximately)
+
+-- Dumping structure for table kasir.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','kasir') DEFAULT 'kasir',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- Dumping data for table kasir.users: ~1 rows (approximately)
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`) VALUES
+	(2, 'admin', '$2y$10$qa91c4FzFNWHznZ8glzNluXQGDe11eROM1bph8fNJDhFEbVXooEI2', 'admin', '2025-06-24 16:26:03');
